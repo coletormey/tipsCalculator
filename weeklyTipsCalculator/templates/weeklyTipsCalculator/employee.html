@@ -1,0 +1,10 @@
+{% extends 'weeklyTipsCalculator/base.html' %}
+
+{% block content %}
+<a href="{% url 'weeklyTipsCalculator:employees' %}">Return to list of employees</a>
+<ul>
+    <li>
+        <p>{{employee.name}} worked {{employee.hours}} hours last week.</p>
+    </li>
+</ul>
+{% endblock content %}

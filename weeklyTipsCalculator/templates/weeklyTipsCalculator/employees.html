@@ -1,0 +1,17 @@
+{% extends "weeklyTipsCalculator/base.html" %}
+
+{% block content %}
+
+<p>Employees</p>
+
+<ul>
+    {% for employee in employees %}
+        <li>
+            <a href="{% url 'weeklyTipsCalculator:employee' employee.id %}">{{ employee }}</a>
+        </li>
+    {% empty %}
+        <li>No employees have been added yet.</li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

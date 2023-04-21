@@ -1,0 +1,17 @@
+{% extends "weeklyTipsCalculator/base.html" %}
+
+{% block content %}
+<div class="options-container">
+    <div class="options">
+        <a href="{% url 'weeklyTipsCalculator:employees' %}">Add/Remove Employee</a>
+        <p><a href="{% url 'weeklyTipsCalculator:calculateTips' %}">Calculate Tips</a></p>
+    </div>
+</div>
+<p>
+    The Weekly Tips Calculator takes the hours
+    for each employee, as well as the total amount
+    of tips, and calculates tips for each employee
+</p>
+{% endblock content %}
+
+

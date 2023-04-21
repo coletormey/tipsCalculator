@@ -1,0 +1,40 @@
+4_18_23
+Cole
+ * Hours worked: 24.08
+ * Percentage of Tips: 16.63672792593616%
+ * Tips: $67.08
+
+Christin
+ * Hours worked: 16.36
+ * Percentage of Tips: 11.303026115793836%
+ * Tips: $45.57
+
+Sam
+ * Hours worked: 16.25
+ * Percentage of Tips: 11.227027773939477%
+ * Tips: $45.26
+
+Jon
+ * Hours worked: 9.98
+ * Percentage of Tips: 6.895122288240983%
+ * Tips: $27.8
+
+Sally
+ * Hours worked: 25.65
+ * Percentage of Tips: 17.721431532402928%
+ * Tips: $71.45
+
+Vanessa
+ * Hours worked: 26.51
+ * Percentage of Tips: 18.31560038690065%
+ * Tips: $73.85
+
+Billy
+ * Hours worked: 25.91
+ * Percentage of Tips: 17.90106397678596%
+ * Tips: $72.17
+
+
+Total tips for the week: $403.21
+Total number of hours worked: 144.74
+Sum of each employee's 'Pecentage of Tips': 100.0%
