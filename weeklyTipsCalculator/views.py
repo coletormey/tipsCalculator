@@ -32,23 +32,19 @@ def calculateTips(request):
     employee = listOfEmployees.pop()
 
 
-
     if request.method != 'POST':
         # Create a blank form
-            
+        form1 = TipsForm(prefix='form1', instance=employee, listOfEmployees=listOfEmployees)
 
-            form1 = TipsForm(prefix='form1', instance=employee)
-            employee = listOfEmployees.pop()
-            form2 = TipsForm(prefix='form2', instance=employee)
+                
+
     else:
         # POST data submitted; process data
-        form1 = TipsForm(data=request.POST, prefix='form1', instance=employee)
-        employee = listOfEmployees.pop()
-        form2 = TipsForm(data=request.POST, prefix='form2', instance=employee)
-        if form1.is_valid() and form2.is_valid():
+        form1 = TipsForm(data=request.POST, prefix='form1', instance=employee, listOfEmployees=listOfEmployees)
+
+        if form1.is_valid():
             form1.save()
-            form2.save()
             return redirect('weeklyTipsCalculator:index')
 
-    context = {'employees': employees, 'form1': form1, 'form2': form2}
+    context = {'employees': employees, 'form1': form1}
     return render(request, 'weeklyTipsCalculator/calculateTips.html', context)
