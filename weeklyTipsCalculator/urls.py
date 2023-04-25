@@ -6,6 +6,8 @@ app_name = 'weeklyTipsCalculator'
 urlpatterns = [
     # Home page
     path('', views.index, name='index'),
+    # Displays search results for employees
+    path('employees/', views.employeesSearch, name='employeesSearch'),
     # Displays Employees and their info
     path('employees/', views.employees, name='employees'),
     # Displays single employee and their info

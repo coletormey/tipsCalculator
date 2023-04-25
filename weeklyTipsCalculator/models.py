@@ -2,10 +2,13 @@ from django.db import models
 from datetime import datetime
 
 # Create your models here.
-class Employee(models.Model):
-    name = models.CharField(max_length=30)
-    hours = models.FloatField()
+class NameField(models.CharField):
+    def get_prep_value(self, value):
+        return str(value).lower()
 
+class Employee(models.Model):
+    name = NameField(max_length=200)
+    hours = models.CharField(max_length=6)
     percentageOfTips = 0
     tips = 0
 

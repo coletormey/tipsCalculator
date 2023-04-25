@@ -15,9 +15,23 @@ def employees(request):
     context = {'employees': employees}
     return render(request, 'weeklyTipsCalculator/employees.html', context)
 
+def employeesSearch(request):
+    query_dict = request.GET # is a dictionary
+    try: # If input does not match anything, do nothing
+        query = query_dict.get('query')
+        employee = Employee.objects.get(name=query) # <input type="text" name="query"/>
+    except:
+        query = None
+    employee = None
+    if query is not None:
+        employee = Employee.objects.get(name=query)
+    context = {'employee': employee}
+    return render(request, "weeklyTipsCalculator/search.html", context)
+
 def employee(request, name):
     # Display a single employee and their information
-    employee = Employee.objects.get(id=name)
+    if name is not None:
+        employee = Employee.objects.get(id=name)
     context = {'employee': employee}
     return render(request, 'weeklyTipsCalculator/employee.html', context)
 
