@@ -7,7 +7,9 @@ urlpatterns = [
     # Home page
     path('', views.index, name='index'),
     # Displays search results for employees
-    path('employees/', views.employeesSearch, name='employeesSearch'),
+    path('employees/', views.employees, name='employeesSearch'),
+    # Displays orm to add new employee
+    path('editEmployees/', views.addEmployee, name='addEmployees'),
     # Displays Employees and their info
     path('employees/', views.employees, name='employees'),
     # Displays single employee and their info

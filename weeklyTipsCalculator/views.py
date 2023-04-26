@@ -28,6 +28,10 @@ def employeesSearch(request):
     context = {'employee': employee}
     return render(request, "weeklyTipsCalculator/search.html", context)
 
+def addEmployee(request):
+    context = {}
+    return render(request, 'weeklyTipsCalculator/addEmployee.html', context)
+
 def employee(request, name):
     # Display a single employee and their information
     if name is not None:
