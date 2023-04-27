@@ -7,7 +7,7 @@ class NameField(models.CharField):
         return str(value).lower()
 
 class Employee(models.Model):
-    name = NameField(max_length=200)
+    name = NameField(max_length=25)
     hours = models.CharField(max_length=6)
     percentageOfTips = 0
     tips = 0

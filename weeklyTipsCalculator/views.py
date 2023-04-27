@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.forms import formset_factory
 
 from .models import Employee
-from .forms import TipsForm
+from .forms import EmployeeForm
 
 # Create your views here.
 def index(request):
@@ -11,7 +11,7 @@ def index(request):
 
 def employees(request):
     # Display all employees
-    employees = Employee.objects.order_by('hours')
+    employees = Employee.objects.order_by('name')
     context = {'employees': employees}
     return render(request, 'weeklyTipsCalculator/employees.html', context)
 
@@ -29,7 +29,18 @@ def employeesSearch(request):
     return render(request, "weeklyTipsCalculator/search.html", context)
 
 def addEmployee(request):
-    context = {}
+    form = EmployeeForm(request.POST or None)
+    context = {
+        "form": form
+    }
+    if form.is_valid():
+        # employeeObject = form.save()
+        # context['form'] = EmployeeForm()
+        employeeObject = Employee.objects.create(name=form.cleaned_data.get("name"))
+        employeeObject.hours = 0
+        context['employee'] = employeeObject
+        context['created'] = True
+
     return render(request, 'weeklyTipsCalculator/addEmployee.html', context)
 
 def employee(request, name):

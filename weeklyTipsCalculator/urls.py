@@ -9,7 +9,7 @@ urlpatterns = [
     # Displays search results for employees
     path('employees/', views.employees, name='employeesSearch'),
     # Displays orm to add new employee
-    path('editEmployees/', views.addEmployee, name='addEmployees'),
+    path('addEmployee/', views.addEmployee, name='addEmployee'),
     # Displays Employees and their info
     path('employees/', views.employees, name='employees'),
     # Displays single employee and their info
