@@ -16,10 +16,11 @@ class EmployeeForm(forms.ModelForm):
             self.add_error('name', f'"{name}" is already in use')
         return data
 
-class HoursForm(forms.ModelForm):
-    class Meta:
+class HoursForm(forms.ModelForm):    
+    class Meta():
         model = Employee
         fields = ['hours']
+
 
     def clean(self):
         data = self.cleaned_data

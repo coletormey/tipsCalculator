@@ -4,7 +4,7 @@
 
 {% if not created %}
 
-<form action='.' method="POST">
+<form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Add New Employee</button>
