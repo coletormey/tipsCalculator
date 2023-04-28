@@ -7,8 +7,7 @@
 
     <form action="{% url 'weeklyTipsCalculator:calculateTips' %}" method="post">
         {% csrf_token %}
-        {{ form1.as_p }}
-        {{ form2.as_p }}
+        {{ formset.as_p }}
         <button name="submit">Calculate Tips</button>
     </form>
 

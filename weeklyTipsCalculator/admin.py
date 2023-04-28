@@ -1,10 +1,11 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Employee, TipsTotal
+from .models import Employee
 
 class EmployeeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'hours', 'timestamp', 'updated']
     search_fields = ['name']
 
 admin.site.register(Employee, EmployeeAdmin)
-admin.site.register(TipsTotal)
+

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.forms import formset_factory
 
 from .models import Employee
-from .forms import EmployeeForm
+from .forms import EmployeeForm, HoursForm
 
 # Create your views here.
 def index(request):
@@ -34,10 +34,10 @@ def addEmployee(request):
         "form": form
     }
     if form.is_valid():
-        # employeeObject = form.save()
         # context['form'] = EmployeeForm()
         employeeObject = Employee.objects.create(name=form.cleaned_data.get("name"))
         employeeObject.hours = 0
+        employeeObject.save()
         context['employee'] = employeeObject
         context['created'] = True
 
@@ -51,29 +51,13 @@ def employee(request, name):
     return render(request, 'weeklyTipsCalculator/employee.html', context)
 
 def calculateTips(request):
-    # Display the fields to enter hours for each employee, 
-    # as well as total tip amount
-
-    listOfEmployees = []
-    employees = Employee.objects.order_by('hours')
-    for employee in employees:
-        listOfEmployees.append(employee)
-    employee = listOfEmployees.pop()
-
-
-    if request.method != 'POST':
-        # Create a blank form
-        form1 = TipsForm(prefix='form1', instance=employee, listOfEmployees=listOfEmployees)
-
-                
-
-    else:
-        # POST data submitted; process data
-        form1 = TipsForm(data=request.POST, prefix='form1', instance=employee, listOfEmployees=listOfEmployees)
-
-        if form1.is_valid():
-            form1.save()
-            return redirect('weeklyTipsCalculator:index')
-
-    context = {'employees': employees, 'form1': form1}
+    hoursFormSet = formset_factory(HoursForm, extra=Employee.objects.count())
+    formset = hoursFormSet()
+    context = {'formset': formset}
+    if request.method == 'POST':
+        formset = {hoursFormSet(request.POST, request.FILES)}
+        if formset.is_valid():
+            for form in formset:
+                if form.cleaned_date:
+                    None
     return render(request, 'weeklyTipsCalculator/calculateTips.html', context)
