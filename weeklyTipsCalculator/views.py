@@ -62,17 +62,20 @@ def calculateTips(request):
                'totalTipsForm': totalTipsForm}
 
     if all([formset.is_valid()]):
-        formset.save()
         totalTipsForm.save()
         for form in formset:
             form.save()
 
         totalHours = calculateTotalHours()
-        checkingPercentage = Employee.calculateTipPercentage(
-            Employee.objects.all(), totalHours
-        )  # returns sum of all percentages. Should equal ~100%
+        listOfEmployees = getListOfEmployees()
+
+        # returns sum of all percentages. Should equal ~100%
+        checkingPercentage = Employee.calculateTipPercentage(listOfEmployees, totalHours)
+        print(checkingPercentage)
         tipsTotal = totalTipsForm.clean.__get__('tipsTotal')
-        print(tipsTotal)
+        # Employee.calculateEmployeeTips(Employee.objects.all(), tipsTotal)
+        
+
 
 
         context['tipsCalculated'] = False
@@ -91,3 +94,11 @@ def calculateTotalTips():
     for employee in Employee.objects.all():
         totalTips += employee.tips
     return totalTips
+
+def getListOfEmployees():
+    listOfEmployees = []
+    employees = Employee.objects.all()
+    for employee in employees:
+        listOfEmployees.append(employee)
+    return listOfEmployees
+

@@ -27,16 +27,18 @@ class Employee(models.Model):
             + f" * Tips: ${self.tips}\n"
         )
     
-    def save(self, *args, **kwargs):
-        if self.slug is None:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.slug is None:
+    #         self.slug = slugify(self.name)
+    #     super().save(*args, **kwargs)
 
     def calculateTipPercentage(listOfEmployees, totalHours):
         totalPercentage = 0
-        for employee in listOfEmployees:
+        for employee in Employee.objects.all():
             employee.percentageOfTips = 100 * (float(employee.hours) / float(totalHours))
             totalPercentage += float(employee.percentageOfTips)
+            employee.save()
+        print(Employee.objects.order_by('name'))
         return totalPercentage
 
 

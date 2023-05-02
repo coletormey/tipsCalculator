@@ -4,7 +4,7 @@ from django.contrib import admin
 from .models import Employee, TipsTotal
 
 class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'hours', 'timestamp', 'updated']
+    list_display = ['id', 'name', 'hours', 'tips', 'percentageOfTips', 'timestamp', 'updated']
     search_fields = ['name']
 
 class TipsTotalAdmin(admin.ModelAdmin):
