@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from django.forms import formset_factory
-from django import forms
+from django.forms.models import modelformset_factory # model form for querysets
+
 from .models import Employee
 from .forms import EmployeeForm, HoursForm
 
@@ -51,14 +51,26 @@ def employee(request, name):
     return render(request, 'weeklyTipsCalculator/employee.html', context)
 
 def calculateTips(request):
-    employees = Employee.objects.order_by('name')
-    form = HoursForm()
-    context = {'employees': employees, 'form': form}
+    form = HoursForm(request.POST or None)
+    hoursFormSet = modelformset_factory(Employee, form=HoursForm, extra=0)
+    qs = Employee.objects.order_by('hours')
+    formset = hoursFormSet(request.POST or None, queryset=qs)
 
-    if form.is_valid():
-        employee.hours = form.clean().get('hours')
-        context['hoursSet'] = True
-        employee = Non
- 
-  
+    context = {'formset': formset,
+               'form': form}
+
+    if all([form.is_valid(), formset.is_valid()]):
+        context['created'] = True
+        child = form.save(commit=False)
+        formset.save()
+        for form in formset:
+            employee = Employee.objects.get(id=2)
+            employee.hours = form.clean()
+            print(employee)
+            employee.save()
+            child.save()
+            form.save()
+            context['employee'] = employee
+
+
     return render(request, 'weeklyTipsCalculator/calculateTips.html', context)

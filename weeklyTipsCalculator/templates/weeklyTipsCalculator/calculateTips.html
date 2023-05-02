@@ -3,17 +3,16 @@
 {% block content %}
 <p>Enter hours worked for each employee:</p>
 
-{% if not hoursSet %}
+{% if not created %}
 
-<form method="POST">
+<form action="{% url 'weeklyTipsCalculator:calculateTips' %}" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ formset.as_p }}
     <button name="submit">Calculate Tips</button>
 </form>
 {% else %}
-    
-<p>New employee was added!</p>
-   
+<p>Tips have been calculated</p>
+
 {% endif %}
 
 {% endblock content %}

@@ -4,7 +4,7 @@ from django.contrib import admin
 from .models import Employee
 
 class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'hours', 'timestamp', 'updated', 'hoursSet']
+    list_display = ['id', 'name', 'hours', 'timestamp', 'updated']
     search_fields = ['name']
 
 admin.site.register(Employee, EmployeeAdmin)

@@ -12,7 +12,6 @@ class Employee(models.Model):
     slug = models.SlugField(max_length=50, blank=True, null=True)
 
     hours = models.CharField(max_length=6)
-    hoursSet = False
     percentageOfTips = 0
     tips = 0
 
@@ -25,7 +24,6 @@ class Employee(models.Model):
             + f" * Hours worked: {self.hours}\n"
             + f" * Percentage of Tips: {self.percentageOfTips}%\n"
             + f" * Tips: ${self.tips}\n"
-            + f" * Hours set: {self.hoursSet}"
         )
     
     def save(self, *args, **kwargs):
