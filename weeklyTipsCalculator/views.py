@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.forms.models import modelformset_factory # model form for querysets
 
-from .models import Employee
-from .forms import EmployeeForm, HoursForm
+from .models import Employee, TipsTotal
+from .forms import EmployeeForm, HoursForm, TotalTipsForm
 
 # Create your views here.
 def index(request):
@@ -51,26 +51,43 @@ def employee(request, name):
     return render(request, 'weeklyTipsCalculator/employee.html', context)
 
 def calculateTips(request):
+    totalTipsForm = TotalTipsForm(request.POST or None)
     form = HoursForm(request.POST or None)
     hoursFormSet = modelformset_factory(Employee, form=HoursForm, extra=0)
     qs = Employee.objects.order_by('hours')
     formset = hoursFormSet(request.POST or None, queryset=qs)
 
     context = {'formset': formset,
-               'form': form}
+               'form': form,
+               'totalTipsForm': totalTipsForm}
 
-    if all([form.is_valid(), formset.is_valid()]):
-        context['created'] = True
-        child = form.save(commit=False)
+    if all([formset.is_valid()]):
         formset.save()
+        totalTipsForm.save()
         for form in formset:
-            employee = Employee.objects.get(id=2)
-            employee.hours = form.clean()
-            print(employee)
-            employee.save()
-            child.save()
             form.save()
-            context['employee'] = employee
+
+        totalHours = calculateTotalHours()
+        checkingPercentage = Employee.calculateTipPercentage(
+            Employee.objects.all(), totalHours
+        )  # returns sum of all percentages. Should equal ~100%
+        tipsTotal = totalTipsForm.clean.__get__('tipsTotal')
+        print(tipsTotal)
+
+
+        context['tipsCalculated'] = False
 
 
     return render(request, 'weeklyTipsCalculator/calculateTips.html', context)
+
+def calculateTotalHours():
+    totalHours = 0
+    for employee in Employee.objects.all():
+        totalHours += employee.hours
+    return totalHours
+
+def calculateTotalTips():
+    totalTips = 0
+    for employee in Employee.objects.all():
+        totalTips += employee.tips
+    return totalTips

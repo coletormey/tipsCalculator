@@ -1,8 +1,13 @@
 from django import forms
+from django.db import models
 from django.forms import formset_factory
 
-from .models import Employee
-
+from .models import Employee, TipsTotal
+global listOfEmployees
+listOfEmployees = []
+employees = Employee.objects.order_by('name')
+for employee in employees:
+    listOfEmployees.append(employee)
 class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
@@ -17,13 +22,27 @@ class EmployeeForm(forms.ModelForm):
         return data
 
 class HoursForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+       super(HoursForm, self).__init__(*args, **kwargs)
+       self.fields['name'].widget.attrs['readonly'] = True
+
     class Meta:
         model = Employee
-        fields = ['hours']
+        fields = ['name', 'hours']
+        labels = {'hours': 'hours'}
 
     def clean(self):
         data = self.cleaned_data
-        hours = data.get('hours')
+
+class TotalTipsForm(forms.ModelForm):
+    totalTips = models.FloatField(max_length=7)
+
+    class Meta:
+        model = TipsTotal
+        fields = ['tipsTotal']
+    
+
+
 
 
 

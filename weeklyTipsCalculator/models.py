@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from datetime import datetime
+import math
 
 # Create your models here.
 class NameField(models.CharField):
@@ -11,7 +12,7 @@ class Employee(models.Model):
     name = NameField(max_length=25)
     slug = models.SlugField(max_length=50, blank=True, null=True)
 
-    hours = models.CharField(max_length=6)
+    hours = models.FloatField(max_length=6)
     percentageOfTips = 0
     tips = 0
 
@@ -31,12 +32,50 @@ class Employee(models.Model):
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
+    def calculateTipPercentage(listOfEmployees, totalHours):
+        totalPercentage = 0
+        for employee in listOfEmployees:
+            employee.percentageOfTips = 100 * (float(employee.hours) / float(totalHours))
+            totalPercentage += float(employee.percentageOfTips)
+        return totalPercentage
+
+
+    def calculateEmployeeTips(listOfEmployees, totalTips):
+        for employee in listOfEmployees:
+            employee.tips = (
+                math.floor((employee.percentageOfTips / 100 * totalTips) * 100) / 100
+            )
+
+
+    def saveAndDisplay(listOfEmployees, date, totalHours, totalTips, checkingPercentage):
+        with open(f"tips.txt", "w") as file:
+            file.write(date)
+            print(date)
+            finalInfo = (
+                f"\nTotal tips for the week: ${totalTips}\n"
+                + f"Total number of hours worked: {totalHours}\n"
+                + f"Sum of each employee's 'Pecentage of Tips': {checkingPercentage}%\n"
+            )
+
+        for employee in listOfEmployees:
+            employeeInfo = employee.getEmployeeInfo()
+            file.write(employeeInfo + "\n")
+            print(employeeInfo)
+
+        file.write(finalInfo)
+        print(finalInfo)
 
 
 
-# class TipsTotal(models.Model):
-#     tipsTotal = models.FloatField()
-#     dateAdded = datetime.now()
+
+class TipsTotal(models.Model):
+    tipsTotal = models.FloatField()
+    dateAdded = datetime.now()
+
+    def __str__(self):
+        return (
+            f"{self.tipsTotal}"
+        )
 
 
 #     def __str__(self):
