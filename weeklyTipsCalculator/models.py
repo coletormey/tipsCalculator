@@ -54,8 +54,6 @@ class Employee(models.Model):
         print(finalInfo)
 
 
-
-
 class TipsTotal(models.Model):
     tipsTotal = models.FloatField()
     dateAdded = datetime.now()
