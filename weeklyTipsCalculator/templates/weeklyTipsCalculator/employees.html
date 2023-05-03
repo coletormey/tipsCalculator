@@ -3,11 +3,17 @@
 {% block content %}
 
 <p>Employees</p>
-
+<a href="{% url 'weeklyTipsCalculator:addEmployee' %}">Add New Employee</a>
+<!--
+<form action="">
+    <input type="text" name="query"/>
+    <input type="submit" />
+</form>
+-->
 <ul>
     {% for employee in employees %}
         <li>
-            <a href="{% url 'weeklyTipsCalculator:employee' employee.id %}">{{ employee }}</a>
+            <a href="{% url 'weeklyTipsCalculator:employee' employee.id %}">{{ employee.name }}</a>
         </li>
     {% empty %}
         <li>No employees have been added yet.</li>

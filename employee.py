@@ -2,8 +2,8 @@ import math
 
 
 class Employee:
-    def __init__(self, name, hours):
-        self.name = name
+    def __init__(self, name, hours=0):
+        self.name = name.lower()
         self.hours = hours
         self.percentageOfTips = 0
         self.tips = 0

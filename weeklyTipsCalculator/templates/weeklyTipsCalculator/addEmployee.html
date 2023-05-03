@@ -1,0 +1,19 @@
+{% extends "weeklyTipsCalculator/base.html" %}
+
+{% block content %}
+
+{% if not created %}
+
+<form action='.' method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add New Employee</button>
+</form>
+{% else %}
+
+<p>New employee was added!</p>
+<a href="{% url 'weeklyTipsCalculator:employee' employee.id %}">{{employee}}</a>
+
+{% endif %}
+
+{% endblock content %}

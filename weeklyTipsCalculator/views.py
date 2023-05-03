@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from django.forms import formset_factory
+from django.forms.models import modelformset_factory # model form for querysets
 
 from .models import Employee
-from .forms import TipsForm
+from .forms import EmployeeForm, HoursForm, TotalTipsForm
 
 # Create your views here.
 def index(request):
@@ -11,44 +11,94 @@ def index(request):
 
 def employees(request):
     # Display all employees
-    employees = Employee.objects.order_by('hours')
+    employees = Employee.objects.order_by('name')
     context = {'employees': employees}
     return render(request, 'weeklyTipsCalculator/employees.html', context)
 
+def employeesSearch(request):
+    query_dict = request.GET # is a dictionary
+    try: # If input does not match anything, do nothing
+        query = query_dict.get('query')
+        employee = Employee.objects.get(name=query) # <input type="text" name="query"/>
+    except:
+        query = None
+    employee = None
+    if query is not None:
+        employee = Employee.objects.get(name=query)
+    context = {'employee': employee}
+    return render(request, "weeklyTipsCalculator/search.html", context)
+
+def addEmployee(request):
+    form = EmployeeForm(request.POST or None)
+    context = {
+        "form": form
+    }
+    if form.is_valid():
+        # context['form'] = EmployeeForm()
+        employeeObject = Employee.objects.create(name=form.cleaned_data.get("name"))
+        employeeObject.hours = 0
+        employeeObject.save()
+        context['employee'] = employeeObject
+        context['created'] = True
+
+    return render(request, 'weeklyTipsCalculator/addEmployee.html', context)
+
 def employee(request, name):
     # Display a single employee and their information
-    employee = Employee.objects.get(id=name)
+    if name is not None:
+        employee = Employee.objects.get(id=name)
     context = {'employee': employee}
     return render(request, 'weeklyTipsCalculator/employee.html', context)
 
 def calculateTips(request):
-    # Display the fields to enter hours for each employee, 
-    # as well as total tip amount
+    totalTipsForm = TotalTipsForm(request.POST or None)
+    form = HoursForm(request.POST or None)
+    hoursFormSet = modelformset_factory(Employee, form=HoursForm, extra=0)
+    qs = Employee.objects.order_by('hours')
+    formset = hoursFormSet(request.POST or None, queryset=qs)
 
+    context = {'formset': formset,
+               'form': form,
+               'totalTipsForm': totalTipsForm}
+
+    if all([formset.is_valid(), totalTipsForm.is_valid()]):
+        formset.save()
+        listOfEmployees = []
+        totalHours = calculateTotalHours()
+        tipsTotal = totalTipsForm.save(commit=False)
+
+        for form in formset:
+            employee = form.save(commit=False)
+            employee.percentageOfTips = Employee.calculateTipPercentage(employee, totalHours)
+            employee.tips = Employee.calculateEmployeeTips(employee, tipsTotal)
+            employee.save()
+
+
+        # for employee in Employee.objects.all():
+        #     Employee.calculateEmployeeTips(employee, tipsTotal)
+
+
+
+
+        context['tipsCalculated'] = False
+    return render(request, 'weeklyTipsCalculator/calculateTips.html', context)
+
+def calculateTotalHours():
+    totalHours = 0
+    for employee in Employee.objects.all():
+        totalHours += employee.hours
+    return totalHours
+
+def calculateTotalTips():
+    totalTips = 0
+    for employee in Employee.objects.all():
+        totalTips += employee.tips
+    return totalTips
+
+def getListOfEmployees():
     listOfEmployees = []
-    employees = Employee.objects.order_by('hours')
+    employees = Employee.objects.all()
     for employee in employees:
         listOfEmployees.append(employee)
-    employee = listOfEmployees.pop()
+    return listOfEmployees
 
-
-
-    if request.method != 'POST':
-        # Create a blank form
-            
-
-            form1 = TipsForm(prefix='form1', instance=employee)
-            employee = listOfEmployees.pop()
-            form2 = TipsForm(prefix='form2', instance=employee)
-    else:
-        # POST data submitted; process data
-        form1 = TipsForm(data=request.POST, prefix='form1', instance=employee)
-        employee = listOfEmployees.pop()
-        form2 = TipsForm(data=request.POST, prefix='form2', instance=employee)
-        if form1.is_valid() and form2.is_valid():
-            form1.save()
-            form2.save()
-            return redirect('weeklyTipsCalculator:index')
-
-    context = {'employees': employees, 'form1': form1, 'form2': form2}
-    return render(request, 'weeklyTipsCalculator/calculateTips.html', context)
