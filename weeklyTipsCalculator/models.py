@@ -14,7 +14,7 @@ class Employee(models.Model):
 
     hours = models.FloatField(max_length=6, default=0)
     percentageOfTips = models.FloatField(max_length=6, default=0)
-    tips = 0
+    tips = models.FloatField(max_length=6, default=0)
 
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -26,42 +26,13 @@ class Employee(models.Model):
             + f" * Percentage of Tips: {self.percentageOfTips}%\n"
             + f" * Tips: ${self.tips}\n"
         )
-    
-    # def save(self, *args, **kwargs):
-    #     if self.slug is None:
-    #         self.slug = slugify(self.name)
-    #     super().save(*args, **kwargs)
 
     def calculateTipPercentage(employee, totalHours):
-        print(f'Total hours: {totalHours}')
-        print(f'employee hours: {employee.hours}')
-        percentageOfTips = 100 * (employee.hours / float(totalHours))
-        print(percentageOfTips)
-        return percentageOfTips
+        return 100 * (employee.hours / float(totalHours))
 
 
-        # print(employee)    
-        # print(Employee.objects.order_by('name'))
-        # return employee
-    
-
-
-    def Old_calculateTipPercentage(listOfEmployees, totalHours):
-        totalPercentage = 0
-        for employee in Employee.objects.all():
-            employee.percentageOfTips = 100 * (employee.hours / float(totalHours))
-            totalPercentage += float(employee.percentageOfTips)
-            employee.save()
-            print(employee) 
-        #print(Employee.objects.order_by('name'))
-        return totalPercentage
-
-
-    def calculateEmployeeTips(listOfEmployees, totalTips):
-        for employee in listOfEmployees:
-            employee.tips = (
-                math.floor((employee.percentageOfTips / 100 * totalTips) * 100) / 100
-            )
+    def calculateEmployeeTips(employee, totalTips):
+        return math.floor(((employee.percentageOfTips / 100) * totalTips.tipsTotal) * 100) / 100
 
 
     def saveAndDisplay(listOfEmployees, date, totalHours, totalTips, checkingPercentage):
@@ -91,9 +62,5 @@ class TipsTotal(models.Model):
 
     def __str__(self):
         return (
-            f"{self.tipsTotal}"
+            f"${self.tipsTotal}"
         )
-
-
-#     def __str__(self):
-#         return (f"{self.dateAdded.date()} -- ${self.tipsTotal}")

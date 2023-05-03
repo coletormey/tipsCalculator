@@ -29,7 +29,6 @@ class HoursForm(forms.ModelForm):
     class Meta:
         model = Employee
         fields = ['name', 'hours']
-        labels = {'hours': 'hours'}
 
     def clean(self):
         data = self.cleaned_data
@@ -40,6 +39,7 @@ class TotalTipsForm(forms.ModelForm):
     class Meta:
         model = TipsTotal
         fields = ['tipsTotal']
+        labels = {'tipsTotal': 'Total Tips'}
     
 
 

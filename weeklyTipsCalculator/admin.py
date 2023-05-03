@@ -10,6 +10,7 @@ class EmployeeAdmin(admin.ModelAdmin):
 class TipsTotalAdmin(admin.ModelAdmin):
     list_display = ['tipsTotal', 'dateAdded']
 
+
 admin.site.register(Employee, EmployeeAdmin)
 admin.site.register(TipsTotal, TipsTotalAdmin)
 

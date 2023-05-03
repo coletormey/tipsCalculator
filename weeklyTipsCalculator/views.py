@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.forms.models import modelformset_factory # model form for querysets
 
-from .models import Employee, TipsTotal
+from .models import Employee
 from .forms import EmployeeForm, HoursForm, TotalTipsForm
 
 # Create your views here.
@@ -61,26 +61,24 @@ def calculateTips(request):
                'form': form,
                'totalTipsForm': totalTipsForm}
 
-    if all([formset.is_valid()]):
+    if all([formset.is_valid(), totalTipsForm.is_valid()]):
         formset.save()
         listOfEmployees = []
         totalHours = calculateTotalHours()
-        
-        for employee in Employee.objects.all():
-            listOfEmployees.append(employee)
+        tipsTotal = totalTipsForm.save(commit=False)
 
         for form in formset:
             employee = form.save(commit=False)
             employee.percentageOfTips = Employee.calculateTipPercentage(employee, totalHours)
+            employee.tips = Employee.calculateEmployeeTips(employee, tipsTotal)
             employee.save()
-            # employeeToAlter.percentageOfTips = Employee.calculateTipPercentage(employeeToAlter, totalHours)
-            # employeeToAlter.save()
-            # print(employeeToAlter)
-            
 
-        # print(checkingPercentage)
-        tipsTotal = totalTipsForm.clean.__get__('tipsTotal')
-        # Employee.calculateEmployeeTips(Employee.objects.all(), tipsTotal)
+
+        # for employee in Employee.objects.all():
+        #     Employee.calculateEmployeeTips(employee, tipsTotal)
+
+
+
 
         context['tipsCalculated'] = False
     return render(request, 'weeklyTipsCalculator/calculateTips.html', context)

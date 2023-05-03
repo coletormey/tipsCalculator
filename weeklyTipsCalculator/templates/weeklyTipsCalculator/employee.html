@@ -4,7 +4,10 @@
 <a href="{% url 'weeklyTipsCalculator:employees' %}">Return to list of employees</a>
 <ul>
     <li>
-        <p>{{employee.name}} worked {{employee.hours}} hours last week.</p>
+        <pre>
+{{employee.name}} worked {{employee.hours}} hours last week,
+and earned ${{employee.tips}} in tips.
+        </pre>
     </li>
 </ul>
 {% endblock content %}
