@@ -12,8 +12,8 @@ class Employee(models.Model):
     name = NameField(max_length=25)
     slug = models.SlugField(max_length=50, blank=True, null=True)
 
-    hours = models.FloatField(max_length=6)
-    percentageOfTips = 0
+    hours = models.FloatField(max_length=6, default=0)
+    percentageOfTips = models.FloatField(max_length=6, default=0)
     tips = 0
 
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -32,13 +32,28 @@ class Employee(models.Model):
     #         self.slug = slugify(self.name)
     #     super().save(*args, **kwargs)
 
-    def calculateTipPercentage(listOfEmployees, totalHours):
+    def calculateTipPercentage(employee, totalHours):
+        print(f'Total hours: {totalHours}')
+        print(f'employee hours: {employee.hours}')
+        percentageOfTips = 100 * (employee.hours / float(totalHours))
+        print(percentageOfTips)
+        return percentageOfTips
+
+
+        # print(employee)    
+        # print(Employee.objects.order_by('name'))
+        # return employee
+    
+
+
+    def Old_calculateTipPercentage(listOfEmployees, totalHours):
         totalPercentage = 0
         for employee in Employee.objects.all():
-            employee.percentageOfTips = 100 * (float(employee.hours) / float(totalHours))
+            employee.percentageOfTips = 100 * (employee.hours / float(totalHours))
             totalPercentage += float(employee.percentageOfTips)
             employee.save()
-        print(Employee.objects.order_by('name'))
+            print(employee) 
+        #print(Employee.objects.order_by('name'))
         return totalPercentage
 
 
