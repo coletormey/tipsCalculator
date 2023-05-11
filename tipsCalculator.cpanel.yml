@@ -1,5 +1,6 @@
 ---
 deployment:
-	tasks:
-		- export DEPLOYPATH=/home/tormeyxyz/repositories/tipsCalculator/
-		- /bin/cp -R images $DEPLOYPATH
+  tasks:
+    - export DEPLOYPATH=/home/tormeyxyz/public_html/
+    - /bin/cp index.html $DEPLOYPATH
+    - /bin/cp style.css $DEPLOYPATH
