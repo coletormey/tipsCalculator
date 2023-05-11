@@ -71,6 +71,7 @@ def calculateTips(request):
             employee.percentageOfTips = Employee.calculateTipPercentage(employee, totalHours)
             employee.tips = Employee.calculateEmployeeTips(employee, tipsTotal)
             employee.save()
+            tipsTotal.save()
 
         context['tipsCalculated'] = False
     return render(request, 'weeklyTipsCalculator/calculateTips.html', context)
