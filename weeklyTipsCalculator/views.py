@@ -63,7 +63,6 @@ def calculateTips(request):
 
     if all([formset.is_valid(), totalTipsForm.is_valid()]):
         formset.save()
-        listOfEmployees = []
         totalHours = calculateTotalHours()
         tipsTotal = totalTipsForm.save(commit=False)
 
@@ -72,13 +71,7 @@ def calculateTips(request):
             employee.percentageOfTips = Employee.calculateTipPercentage(employee, totalHours)
             employee.tips = Employee.calculateEmployeeTips(employee, tipsTotal)
             employee.save()
-
-
-        # for employee in Employee.objects.all():
-        #     Employee.calculateEmployeeTips(employee, tipsTotal)
-
-
-
+            tipsTotal.save()
 
         context['tipsCalculated'] = False
     return render(request, 'weeklyTipsCalculator/calculateTips.html', context)
@@ -89,16 +82,4 @@ def calculateTotalHours():
         totalHours += employee.hours
     return totalHours
 
-def calculateTotalTips():
-    totalTips = 0
-    for employee in Employee.objects.all():
-        totalTips += employee.tips
-    return totalTips
-
-def getListOfEmployees():
-    listOfEmployees = []
-    employees = Employee.objects.all()
-    for employee in employees:
-        listOfEmployees.append(employee)
-    return listOfEmployees
 
