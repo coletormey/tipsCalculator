@@ -1,9 +1,10 @@
 ~5_9_23
-Cole 22.40
-Christin 12.23
-Sam 13.10
-Jon 10.96
-Sally 28.43
-Vanessa 25.56
-Billy 27.68
-$523.75
+Cole 29.66
+Christin 15.11
+Sam 16.80
+Jon 7.05
+Sally 32.96
+Vanessa 31.73
+Billy 31.75
+Chase 8.83
+$579.28
